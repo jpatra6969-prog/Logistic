@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0e1a; overflow:hidden; height:100vh; width:100vw; font-family:'Rajdhani',sans-serif; }
+
+  /* STARS */
+  .stars { position:absolute; inset:0; }
+  .star  { position:absolute; background:white; border-radius:50%; animation:twinkle 2s infinite alternate; }
+  @keyframes twinkle { from{opacity:.2;} to{opacity:1;} }
+
+  /* CITY */
+  .city { position:absolute; bottom:110px; left:0; right:0; height:180px; overflow:hidden; }
+  .city svg { width:100%; height:100%; }
+
+  /* ROAD */
+  .road { position:absolute; bottom:0; left:0; right:0; height:110px;
+    background:linear-gradient(180deg,#22263a,#13162a); border-top:3px solid #3a3f5c; }
+  .dash { position:absolute; top:50%; height:6px; width:120px; background:#f7c948;
+    border-radius:3px; animation:dashMove 1.4s linear infinite; }
+  .dash:nth-child(1){left:0px;}
+  .dash:nth-child(2){left:400px; animation-delay:-.47s;}
+  .dash:nth-child(3){left:800px; animation-delay:-.93s;}
+  .dash:nth-child(4){left:1200px;animation-delay:-1.4s;}
+  .dash:nth-child(5){left:1600px;animation-delay:-.2s;}
+  @keyframes dashMove { from{transform:translateX(200px);} to{transform:translateX(-1800px);} }
+
+  /* TRUCK */
+  #truck {
+    position:absolute; bottom:110px; width:360px;
+    animation:driveIn 0.8s cubic-bezier(.2,1,.3,1) both;
+    animation-delay:0.1s;
+  }
+  @keyframes driveIn { from{left:-400px;} to{left:calc(50vw - 180px);} }
+  .truck-svg { width:100%; display:block; filter:drop-shadow(0 10px 28px rgba(0,0,0,.6)); }
+
+  /* WHEELS */
+  .wheel { position:absolute; bottom:-14px; width:44px; height:44px; border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#666,#111);
+    border:5px solid #888; animation:spin .4s linear infinite; }
+  .wheel::after { content:''; position:absolute; inset:8px; border-radius:50%; border:3px dashed #444; }
+  .wf { right:22px; } .wr { left:46px; }
+  @keyframes spin { to{transform:rotate(360deg);} }
+
+  /* EXHAUST */
+  .exhaust { position:absolute; top:8px; left:-14px; display:flex; flex-direction:column; gap:3px; }
+  .puff { width:10px; height:10px; border-radius:50%; background:rgba(200,200,220,.3); animation:puff .9s ease-out infinite; }
+  .puff:nth-child(2){animation-delay:-.3s; width:8px; height:8px;}
+  .puff:nth-child(3){animation-delay:-.6s; width:6px; height:6px;}
+  @keyframes puff { 0%{transform:translateY(0) scale(1);opacity:.5;} 100%{transform:translateY(-36px) scale(2.5);opacity:0;} }
+
+  /* PARCEL */
+  #parcel {
+    position:fixed;
+    z-index:50;
+    width:52px; height:52px;
+    display:none;
+  }
+  .pbox {
+    position:absolute;
+    bottom:0; left:0; right:0; height:34px;
+    background:linear-gradient(135deg,#f7c948,#e8a800);
+    border:2px solid #c88c00; border-radius:4px;
+    box-shadow:0 4px 14px rgba(0,0,0,.5);
+  }
+  .pbox::before { content:''; position:absolute; left:50%; top:0; transform:translateX(-50%); width:2px; height:100%; background:#c88c00; }
+  .pbox::after  { content:''; position:absolute; top:50%; left:0; transform:translateY(-50%); width:100%; height:2px; background:#c88c00; }
+  .plid {
+    position:absolute;
+    top:10px; left:-1px; right:-1px; height:20px;
+    background:linear-gradient(135deg,#ffd84d,#e8a800);
+    border:2px solid #c88c00; border-radius:4px 4px 0 0;
+    transform-origin:50% 100%;
+    box-shadow:0 -2px 8px rgba(0,0,0,.3);
+  }
+  .plid::before { content:''; position:absolute; left:50%; top:0; transform:translateX(-50%); width:2px; height:100%; background:#c88c00; }
+  .pbow {
+    position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+    width:24px; height:12px;
+  }
+  .pbow::before,.pbow::after {
+    content:''; position:absolute;
+    width:10px; height:10px;
+    border:2px solid #ff6b2b; border-radius:50% 0;
+  }
+  .pbow::before{left:0; transform:rotate(-45deg);}
+  .pbow::after {right:0; transform:rotate(135deg);}
+  .pglow {
+    position:absolute; inset:0; border-radius:4px;
+    background:transparent;
+  }
+
+  /* BURST */
+  .piece { position:fixed; z-index:60; border-radius:3px; pointer-events:none;
+    animation:flyOut var(--d) ease-out forwards; }
+  @keyframes flyOut {
+    0%  {transform:translate(0,0) rotate(0) scale(1); opacity:1;}
+    80% {opacity:.7;}
+    100%{transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(.1); opacity:0;}
+  }
+  .ring { position:fixed; border-radius:50%; pointer-events:none; z-index:55; }
+  .spark { position:fixed; border-radius:50%; pointer-events:none; z-index:58;
+    animation:sparkFly var(--d) ease-out forwards; }
+  @keyframes sparkFly {
+    0%  {transform:translate(0,0) scale(1); opacity:1;}
+    100%{transform:translate(var(--x),var(--y)) scale(0); opacity:0;}
+  }
+  #flash { position:fixed; inset:0; pointer-events:none; z-index:70; opacity:0;
+    background:radial-gradient(circle at 50% 55%,rgba(255,230,60,.85),transparent 60%); }
+
+  /* WELCOME */
+  #welcome {
+    position:fixed; left:50%; z-index:80;
+    transform:translateX(-50%) scale(0);
+    text-align:center; white-space:nowrap;
+    opacity:0;
+  }
+  .wlabel {
+    font-family:'Black Han Sans',sans-serif;
+    font-size:clamp(32px,5vw,64px); line-height:1;
+    color:transparent;
+    background:linear-gradient(135deg,#f7c948 0%,#ff6b2b 50%,#f7c948 100%);
+    background-size:200%;
+    -webkit-background-clip:text; background-clip:text;
+    letter-spacing:.05em;
+    filter:drop-shadow(0 4px 24px rgba(247,201,72,.6)) drop-shadow(0 0 40px rgba(255,107,43,.3));
+    animation:shimmer 2s linear infinite;
+  }
+  @keyframes shimmer { 0%{background-position:0%;} 100%{background-position:200%;} }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<!-- City -->
+<div class="city">
+  <svg viewBox="0 0 1440 180" preserveAspectRatio="none">
+    <path fill="#111527" d="M0,180 L0,120 L30,120 L30,80 L50,80 L50,60 L70,60 L70,80 L90,80 L90,40 L110,40 L110,30 L120,30 L120,40 L140,40 L140,80 L160,80 L160,50 L175,50 L175,30 L185,30 L185,50 L200,50 L200,70 L220,70 L220,100 L240,100 L240,60 L260,60 L260,40 L270,30 L280,40 L280,60 L300,60 L300,90 L320,90 L320,50 L335,50 L335,20 L340,10 L345,20 L345,50 L360,50 L360,90 L380,90 L380,70 L400,70 L400,50 L420,50 L420,30 L440,30 L440,50 L460,50 L460,80 L480,80 L480,60 L500,60 L500,40 L520,40 L520,25 L530,25 L530,40 L550,40 L550,60 L570,60 L570,90 L590,90 L590,70 L610,70 L610,100 L630,100 L630,60 L650,60 L650,80 L670,80 L670,50 L690,50 L690,30 L710,30 L710,50 L730,50 L730,80 L750,80 L750,100 L770,100 L770,60 L790,60 L790,40 L800,25 L810,40 L810,60 L830,60 L830,90 L850,90 L850,70 L870,70 L870,50 L890,50 L890,80 L910,80 L910,40 L920,35 L930,40 L930,60 L950,60 L950,90 L970,90 L970,70 L990,70 L990,50 L1010,50 L1010,30 L1020,20 L1030,30 L1030,50 L1050,50 L1050,80 L1070,80 L1070,60 L1090,60 L1090,40 L1110,40 L1110,60 L1130,60 L1130,90 L1150,90 L1150,70 L1170,70 L1170,50 L1190,50 L1190,70 L1210,70 L1210,100 L1230,100 L1230,60 L1250,60 L1250,80 L1270,80 L1270,50 L1290,50 L1290,30 L1310,30 L1310,50 L1330,50 L1330,80 L1350,80 L1350,100 L1370,100 L1370,60 L1400,60 L1400,90 L1440,90 L1440,180 Z"/>
+    <g fill="#f7c948" opacity=".5">
+      <rect x="55" y="64" width="5" height="7"/><rect x="65" y="64" width="5" height="7"/>
+      <rect x="425" y="34" width="6" height="8"/><rect x="650" y="64" width="5" height="8"/>
+      <rect x="793" y="44" width="5" height="7"/><rect x="1022" y="23" width="5" height="6"/>
+    </g>
+  </svg>
+</div>
+
+<!-- Road -->
+<div style="position:absolute;bottom:0;left:0;right:0;height:110px;">
+  <div class="road">
+    <div class="dash"></div><div class="dash"></div>
+    <div class="dash"></div><div class="dash"></div><div class="dash"></div>
+  </div>
+</div>
+
+<!-- Truck -->
+<div id="truck">
+  <div class="exhaust">
+    <div class="puff"></div><div class="puff"></div><div class="puff"></div>
+  </div>
+  <svg class="truck-svg" viewBox="0 0 480 140">
+    <rect x="0" y="18" width="340" height="108" rx="6" fill="#2563eb"/>
+    <rect x="0" y="18" width="340" height="108" rx="6" fill="url(#tg)"/>
+    <rect x="20" y="40" width="220" height="64" rx="4" fill="rgba(255,255,255,.06)"/>
+    <text x="115" y="80" text-anchor="middle" font-family="'Black Han Sans',sans-serif" font-size="20" fill="#f7c948" opacity=".9">SMARTLOGIX</text>
+    <line x1="340" y1="18" x2="340" y2="126" stroke="#1d4ed8" stroke-width="3"/>
+    <rect x="340" y="40" width="110" height="86" rx="6" fill="#1d4ed8"/>
+    <rect x="340" y="40" width="110" height="86" rx="6" fill="url(#cg)"/>
+    <rect x="352" y="50" width="86" height="52" rx="5" fill="#0ea5e9" opacity=".8"/>
+    <rect x="352" y="50" width="86" height="52" rx="5" fill="url(#ws)"/>
+    <path d="M358 55 L395 55 L375 68 Z" fill="rgba(255,255,255,.2)"/>
+    <rect x="446" y="96" width="26" height="14" rx="3" fill="#fef08a"/>
+    <rect x="446" y="115" width="24" height="4" rx="1" fill="#60a5fa" opacity=".6"/>
+    <rect x="446" y="120" width="24" height="4" rx="1" fill="#60a5fa" opacity=".4"/>
+    <rect x="445" y="110" width="28" height="16" rx="3" fill="#1e40af"/>
+    <rect x="442" y="55" width="14" height="9" rx="2" fill="#1e40af"/>
+    <rect x="443" y="56" width="12" height="7" rx="1" fill="#60a5fa" opacity=".5"/>
+    <rect x="350" y="122" width="90" height="7" rx="2" fill="#1e3a8a"/>
+    <rect x="0" y="122" width="470" height="8" rx="2" fill="#1e3a8a"/>
+    <rect x="70"  y="124" width="8" height="10" rx="2" fill="#0f172a"/>
+    <rect x="280" y="124" width="8" height="10" rx="2" fill="#0f172a"/>
+    <rect x="380" y="124" width="8" height="10" rx="2" fill="#0f172a"/>
+    <defs>
+      <linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(255,255,255,.08)"/><stop offset="100%" stop-color="rgba(0,0,0,.2)"/></linearGradient>
+      <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(255,255,255,.1)"/><stop offset="100%" stop-color="rgba(0,0,0,.25)"/></linearGradient>
+      <linearGradient id="ws" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(255,255,255,.25)"/><stop offset="100%" stop-color="rgba(0,0,0,.15)"/></linearGradient>
+    </defs>
+  </svg>
+  <div class="wheel wr"></div>
+  <div class="wheel wf"></div>
+</div>
+
+<!-- PARCEL -->
+<div id="parcel">
+  <div class="plid"><div class="pbow"></div></div>
+  <div class="pbox"><div class="pglow" id="pglow"></div></div>
+</div>
+
+<!-- Flash -->
+<div id="flash"></div>
+
+<!-- WELCOME -->
+<div id="welcome">
+  <div class="wlabel">WELCOME</div>
+</div>
+
+<script>
+// Stars
+const starsEl = document.getElementById('stars');
+for(let i=0;i<120;i++){
+  const s=document.createElement('div'); s.className='star';
+  const sz=Math.random()*2.5+0.5;
+  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*72}%;left:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${1.5+Math.random()*2.5}s;`;
+  starsEl.appendChild(s);
+}
+
+const truck   = document.getElementById('truck');
+const parcel  = document.getElementById('parcel');
+const plid    = parcel.querySelector('.plid');
+const pglow   = document.getElementById('pglow');
+const flash   = document.getElementById('flash');
+const welcome = document.getElementById('welcome');
+
+// Easing
+const easeOutBounce = t => {
+  if(t<1/2.75) return 7.5625*t*t;
+  if(t<2/2.75) return 7.5625*(t-=1.5/2.75)*t+.75;
+  if(t<2.5/2.75) return 7.5625*(t-=2.25/2.75)*t+.9375;
+  return 7.5625*(t-=2.625/2.75)*t+.984375;
+};
+const easeInOut = t => t<.5?2*t*t:-1+(4-2*t)*t;
+const easeOutBack = t => { const c=1.70158; return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2); };
+
+function tween(dur, onTick, onDone){
+  const t0=performance.now();
+  (function loop(now){
+    const t=Math.min((now-t0)/dur,1);
+    onTick(t);
+    if(t<1) requestAnimationFrame(loop);
+    else if(onDone) onDone();
+  })(t0);
+}
+
+// ── STEP 0: WELCOME hidden until after burst ──
+welcome.style.opacity = '0';
+welcome.style.transform = 'translateX(-50%) scale(0)';
+
+// ── STEP 1: After truck arrives, drop parcel ──
+setTimeout(()=>{
+  const tRect  = truck.getBoundingClientRect();
+  // parcel starts at LEFT edge of truck, mid-height
+  const startX = tRect.left - 60;
+  const startY = tRect.top + tRect.height * 0.2;
+  const roadY  = window.innerHeight - 122 - 52;
+
+  // Show parcel at starting position immediately
+  parcel.style.display    = 'block';
+  parcel.style.left       = startX + 'px';
+  parcel.style.top        = startY + 'px';
+  parcel.style.opacity    = '1';
+  parcel.style.transform  = 'rotate(0deg)';
+
+  // Drop down to road with spin
+  tween(220, t => {
+    const ease = t*t;
+    parcel.style.top       = (startY + (roadY - startY) * ease) + 'px';
+    parcel.style.transform = `rotate(${t*240}deg)`;
+  }, () => {
+    parcel.style.top       = roadY+'px';
+    parcel.style.transform = 'rotate(0deg)';
+    doBounce(startX, roadY);
+  });
+
+}, 1000);
+
+function doBounce(cx, cy){
+  const restY = cy;
+  // Bounce
+  tween(450, t => {
+    const b = easeOutBounce(t);
+    parcel.style.top = (restY + (1-b)*60) + 'px';
+  }, () => {
+    parcel.style.top = restY+'px';
+    doShake(cx + 26, restY + 26);
+  });
+}
+
+function doShake(cx, cy){
+  let n=0;
+  const iv = setInterval(()=>{
+    const dx=(Math.random()-.5)*7;
+    parcel.style.transform=`translate(${dx}px,${(Math.random()-.5)*3}px) rotate(${dx}deg)`;
+    if(++n>10){ clearInterval(iv); parcel.style.transform=''; doOpenLid(cx,cy); }
+  },55);
+}
+
+function doOpenLid(cx, cy){
+  // Lid swings open
+  tween(600, t => {
+    const e = easeInOut(t);
+    plid.style.transform = `rotateX(${-145*e}deg)`;
+    pglow.style.background = `radial-gradient(ellipse at 50% 0%,rgba(255,210,0,${(e*.8).toFixed(2)}),transparent 70%)`;
+  }, () => {
+    // Light beam
+    const beam=document.createElement('div');
+    beam.style.cssText=`position:fixed;z-index:45;pointer-events:none;left:${cx-35}px;bottom:${window.innerHeight-cy}px;width:70px;height:0;background:linear-gradient(to top,rgba(255,220,60,.9),rgba(255,200,0,.4),transparent);border-radius:35px;transition:height .4s ease-out,opacity .3s;`;
+    document.body.appendChild(beam);
+    requestAnimationFrame(()=>{ beam.style.height='240px'; });
+    setTimeout(()=>{ beam.style.opacity='0'; setTimeout(()=>beam.remove(),400); }, 350);
+    setTimeout(()=>doBurst(cx,cy), 420);
+  });
+}
+
+function doBurst(cx, cy){
+  // Hide parcel
+  parcel.style.display='none';
+
+  // Flash
+  flash.style.opacity='1';
+  flash.style.transition='opacity .05s';
+  setTimeout(()=>{ flash.style.transition='opacity .35s'; flash.style.opacity='0'; },60);
+
+  // Rings
+  [0,100,210].forEach((delay,i)=>{
+    setTimeout(()=>{
+      const ring=document.createElement('div'); ring.className='ring';
+      const s=50+i*15;
+      ring.style.cssText=`left:${cx-s/2}px;top:${cy-s/2}px;width:${s}px;height:${s}px;border:${3-i}px solid rgba(247,201,72,${.9-i*.2});`;
+      document.body.appendChild(ring);
+      tween(800, t=>{
+        ring.style.transform=`scale(${.05+t*6})`;
+        ring.style.opacity=`${1-t}`;
+      },()=>ring.remove());
+    },delay);
+  });
+
+  // Fragments
+  const cols=['#f7c948','#e8a800','#ff6b2b','#fff','#ffd700','#ffb347','#c88c00'];
+  for(let i=0;i<38;i++){
+    const p=document.createElement('div'); p.className='piece';
+    const ang=(i/38)*Math.PI*2+(Math.random()-.5)*.5;
+    const dist=80+Math.random()*220;
+    const w=5+Math.random()*20, h=4+Math.random()*16;
+    const dur=(.45+Math.random()*.7)+'s';
+    p.style.cssText=`
+      left:${cx-w/2}px;top:${cy-h/2}px;width:${w}px;height:${h}px;
+      background:${cols[Math.floor(Math.random()*cols.length)]};
+      border-radius:${Math.random()>.4?'50%':'3px'};
+      --x:${Math.cos(ang)*dist}px;--y:${Math.sin(ang)*dist-90}px;
+      --r:${(Math.random()-.5)*720}deg;--d:${dur};
+    `;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), parseFloat(dur)*1000+100);
+  }
+
+  // Sparks
+  for(let i=0;i<24;i++){
+    const sp=document.createElement('div'); sp.className='spark';
+    const ang=(i/24)*Math.PI*2;
+    const d=100+Math.random()*140;
+    const dur=(.6+Math.random()*.6)+'s';
+    sp.style.cssText=`
+      left:${cx}px;top:${cy}px;width:${4+Math.random()*8}px;height:${4+Math.random()*8}px;
+      background:${Math.random()>.5?'#39ff14':'#f7c948'};
+      --x:${Math.cos(ang)*d}px;--y:${Math.sin(ang)*d-60}px;--d:${dur};
+      animation-delay:${Math.random()*.25}s;
+    `;
+    document.body.appendChild(sp);
+    setTimeout(()=>sp.remove(),parseFloat(dur)*1000+350);
+  }
+
+  // WELCOME appears only after burst fragments settle (~900ms)
+  setTimeout(()=>{
+    const fromBot = window.innerHeight - cy + 120;
+    welcome.style.transition='none';
+    welcome.style.transform='translateX(-50%) scale(0)';
+    welcome.style.bottom = fromBot+'px';
+    welcome.style.opacity='1';
+    requestAnimationFrame(()=>{
+      tween(700, t=>{
+        welcome.style.transform=`translateX(-50%) scale(${easeOutBack(t)})`;
+      },()=>{
+        tween(1400, t=>{
+          welcome.style.bottom=(fromBot + t*80)+'px';
+        });
+      });
+    });
+  }, 900);
+}
+</script>
+</body>
+</html>
+<script>
+
+// Redirect to dashboard after animation
+
+// Redirect to Streamlit Dashboard after animation
+
+setTimeout(function() {
+    window.location.href = "http://localhost:8508";
+}, 8000); // 8 seconds
+
+</script>
+
