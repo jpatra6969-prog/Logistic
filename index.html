@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+
+    <!-- Website Title -->
+    <title>Join With Us</title>
+
+    <!-- Responsive viewport for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+
+    <!-- Font Awesome (for icons like facebook, instagram, menu icon) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+
+    <!-- Swiper CSS (used for slider / vertical scroll slides) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+    <!-- GSAP animation library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <!-- External CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main>
+
+        <!-- Website Logo -->
+        <div class="logo">Join With Us</div>
+
+        <!-- Social Media Icons -->
+        <div class="social">
+            <div class="bar"></div>
+
+            <!-- Facebook icon -->
+            <a href=""><i class="fab fa-facebook"></i></a>
+
+            <!-- Instagram icon -->
+            <a href=""><i class="fab fa-instagram"></i></a>
+
+            <!-- Twitter icon -->
+            <a href=""><i class="fab fa-twitter"></i></a>
+        </div>
+
+        <!-- Menu Button -->
+        <div class="menu">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <!-- Swiper Container (Main Slider) -->
+        <div class="swiper">
+
+            <!-- Wrapper that holds all slides -->
+            <div class="swiper-wrapper">
+
+                <!-- ================= FIRST SLIDE ================= -->
+
+                <div class="swiper-slide first">
+
+                    <!-- Yellow background shape -->
+                    <div class="yellow"></div>
+
+                    <!-- Black background shape -->
+                    <div class="black"></div>
+
+                    <!-- Main Content -->
+                    <div class="content">
+
+                        <!-- Title Section -->
+                        <div class="title">
+
+                            <!-- Small text -->
+                            <div class="small">Welcome to</div>
+
+                            <!-- Big animated text -->
+                            <div class="big">
+                                <span>L</span>
+                                <span>O</span>
+                                <span>G</span>
+                                <span>I</span>
+                                <span>X</span>
+                            </div>
+
+                        </div>
+
+                        <!-- Truck Image -->
+                        <div class="image">
+                            <img src="images/background.webp" alt="">
+                        </div>
+
+                        <!-- Button Section -->
+                        <div class="specs">
+
+                            <button>
+                                Discover Now
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Pagination bullets -->
+            <div class="swiper-pagination"></div>
+
+        </div>
+    </main>
+
+
+    <!-- Swiper JavaScript Library -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+
+    <!-- Swiper Slider Configuration -->
+    <script>
+
+        var swiper = new Swiper(".swiper", {
+
+            direction: "vertical",
+            slidesPerView: 1,
+            spaceBetween: 30,
+            mousewheel: true,
+            effect: "coverflow",
+            speed: 2000,
+
+            coverflowEffect: {
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+            },
+
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+
+                renderBullet: function (index, className) {
+                    return '<span class="' + className + '"><span>' +
+                        String(index + 1).padStart(2, '0') +
+                        '</span></span>';
+                },
+            },
+        });
+
+
+        /* ================= GSAP ANIMATIONS ================= */
+
+        gsap.from(".first .yellow", {
+            y: -1000,
+            duration: 2
+        })
+
+        gsap.from(".first .black", {
+            y: 1000,
+            duration: 2
+        })
+
+        gsap.from(".first img", {
+            x: 1000,
+            duration: 2
+        })
+
+        gsap.from(".first .small", {
+            y: 100,
+            opacity: 0,
+            delay: 2.1
+        })
+
+        gsap.from(".first .big span", {
+            y: 100,
+            opacity: 0,
+            stagger: 0.2,
+            delay: 2.1
+        })
+
+    </script>
+
+</body>
+</html>
